@@ -3,7 +3,7 @@
 
 Here is a preview of the chatbot interface:
 
-![Chatbot Interface](Resources/image.png)
+![Chatbot Interface](Resources/interface.png)
 ## Setup Instructions
 
 Follow these steps to set up the Streamlit app locally:
