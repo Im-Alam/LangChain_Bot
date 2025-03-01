@@ -39,7 +39,7 @@ def chunk_text(txt: str)->list[str]:
     return chunks
 
 def embed_text(text_chunk):
-    embeddings = VertexAIEmbeddings(model_name="text-embedding-004")
+    embeddings = VertexAIEmbeddings(model_name="text-embedding-004") #  using VertexAIEmbeddings with free $300 credits
     # embeddings = OpenAIEmbeddings() # shows: quota excedded
     vector_store = FAISS.from_texts(texts=text_chunk, embedding = embeddings)
     print(vector_store)
@@ -48,7 +48,7 @@ def embed_text(text_chunk):
 
 
 def get_conversation_chain(vector_store):
-    llm = ChatGroq(temperature=0, model_name="mixtral-8x7b-32768")
+    llm = ChatGroq(temperature=0.5, model_name="mixtral-8x7b-32768")
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
 
     conversation_chain = ConversationalRetrievalChain.from_llm(
@@ -85,12 +85,12 @@ def main():
     st.markdown(css, unsafe_allow_html=True)
     st.header("📖 Chat with your PDF: Books")
 
-    user_question = st.text_input("Ask question about document",)
+    user_question = st.text_input("Ask question about document here...",)
     
     if user_question:
-        st.write(user_template.replace("{{msg}}", user_question), unsafe_allow_html=True)
+        # st.write(user_template.replace("{{msg}}", user_question), unsafe_allow_html=True)
         handle_user_input(user_question)
-    st.write(bot_template.replace("{{msg}}","How can I help you?"), unsafe_allow_html=True)
+    
 
     with st.sidebar:
         st.subheader("Your documents")

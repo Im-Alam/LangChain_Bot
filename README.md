@@ -10,7 +10,7 @@ Follow these steps to set up the Streamlit app locally:
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/yourusername/LangChain_ChatBot.git
+    git clone https://github.com/Im-Alam/LangChain_ChatBot.git
     cd LangChain_ChatBot
     ```
 
