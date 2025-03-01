@@ -1,17 +1,17 @@
 import streamlit as st
 from dotenv import load_dotenv
 from typing import List
-
-# import vertexai
-# from langchain.embeddings import OpenAIEmbeddings, HuggingFaceInstructEmbeddings
-# from langchain.llms import openai # Will use davinchi
-
 from PyPDF2 import PdfReader
+
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 from langchain.text_splitter import CharacterTextSplitter, RecursiveCharacterTextSplitter
 from langchain_google_vertexai import VertexAIEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.memory import ConversationBufferMemory
 from langchain_community.llms import huggingface_hub
+from langchain_groq import ChatGroq
 from langchain_google_vertexai import VertexAIEmbeddings
 from langchain.chains import ConversationalRetrievalChain
 from htmlTemplate import css, bot_template, user_template
@@ -48,10 +48,7 @@ def embed_text(text_chunk):
 
 
 def get_conversation_chain(vector_store):
-    llm = huggingface_hub.HuggingFaceHub(
-        repo_id="HuggingFaceTB/SmolLM2-1.7B-Instruct", 
-        model_kwargs={"temperature": 0.8, "max_length": 1000}
-    )
+    llm = ChatGroq(temperature=0, model_name="mixtral-8x7b-32768")
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
 
     conversation_chain = ConversationalRetrievalChain.from_llm(
