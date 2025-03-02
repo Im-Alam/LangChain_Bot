@@ -2,6 +2,7 @@ import streamlit as st
 from dotenv import load_dotenv
 from typing import List
 from PyPDF2 import PdfReader
+import os
 
 import warnings
 warnings.filterwarnings("ignore", category=DeprecationWarning)
@@ -27,7 +28,7 @@ def extract_text_from_pfd(pdf_docs)->str:
     # print(text_)
     return text_
 
-def chunk_text(txt: str)->list[str]:
+def chunk_text(txt: str)->List[str]:
     text_splitte = RecursiveCharacterTextSplitter(
         chunk_size = 1000,
         chunk_overlap = 100,
@@ -80,6 +81,7 @@ def main():
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = None 
     
+    
     st.set_page_config(page_title="Chat with pdf", page_icon="books")
 
     st.markdown(css, unsafe_allow_html=True)
@@ -88,29 +90,33 @@ def main():
     user_question = st.text_input("Ask question about document here...",)
     
     if user_question:
-        # st.write(user_template.replace("{{msg}}", user_question), unsafe_allow_html=True)
-        handle_user_input(user_question)
+        if st.session_state.conversation is not None:
+            handle_user_input(user_question)
+        else:
+            st.write("No context!!!  Pls upload your PDFs and click on Process")
     
 
     with st.sidebar:
         st.subheader("Your documents")
         pdf_docs = st.file_uploader("Uload your PDFs here and click on Process", accept_multiple_files=True, type=['pdf'])
         
+        
         if st.button("Process"):
-            with st.spinner("Processing"):
-                # get text from pdf
-                raw_text = extract_text_from_pfd(pdf_docs)
-                #print(raw_text)
+            if pdf_docs:
+                with st.spinner("Processing"):
+                    # Get text from PDF
+                    raw_text = extract_text_from_pfd(st.session_state.pdf_docs)
 
-                # chunk the texts gathered
-                text_chunks = chunk_text(raw_text)
-                #st.write(text_chunks)
+                    # Chunk the texts gathered
+                    text_chunks = chunk_text(raw_text)
 
-                # create vector store
-                vector_store = embed_text(text_chunks)
+                    # Create vector store
+                    vector_store = embed_text(text_chunks)
 
-                # setup conversation
-                st.session_state.conversation = get_conversation_chain(vector_store)
+                    # Setup conversation
+                    st.session_state.conversation = get_conversation_chain(vector_store)
+            else:
+                st.write("Please upload atleast one PDF file.")
 
 
 

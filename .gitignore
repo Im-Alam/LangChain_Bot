@@ -3,3 +3,4 @@
 linen-arch-452005*
 *.pyc
 __pycache__
+.streamlit/
