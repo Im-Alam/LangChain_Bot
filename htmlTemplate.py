@@ -25,6 +25,30 @@ css = """
         padding: 10px;
     }
 
+    .fixed-bottom {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: white;
+        padding: 10px;
+        z-index: 1000;
+        border-top: 1px solid #e1e4e8;
+    }
+    
+    .chat-container {
+        margin-bottom: 80px; /* Space for the input box */
+        overflow-y: auto;
+        height: calc(100vh - 120px); /* Adjust based on header and input box */
+        padding: 10px;
+    }
+
+    /* Optional: Make the input box look nice */
+    .stTextInput > div > input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
 
 </style>
 """

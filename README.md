@@ -4,6 +4,8 @@
 Here is a preview of the chatbot interface:
 
 ![Chatbot Interface](Resources/interface.png)
+![Outcome if no document selected](Resources/image.png)
+
 ## Setup Instructions
 
 Follow these steps to set up the Streamlit app locally:
@@ -24,13 +26,16 @@ Follow these steps to set up the Streamlit app locally:
     ```bash
     pip install -r requirements.txt
     ```
-
-4. **Run the Streamlit app:**
+4. **Setup environment based on sample_env file:**
+    ```bash
+    touch .env
+    ```
+5. **Run the Streamlit app:**
     ```bash
     streamlit run app.py
     ```
 
-5. **Open your browser and navigate to:**
+6. **Open your browser and navigate to:**
     ```
     http://localhost:8501
     ```

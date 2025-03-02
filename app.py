@@ -65,11 +65,21 @@ def handle_user_input(user_question):
     response = st.session_state.conversation({"question":user_question})
     st.session_state.chat_history = response['chat_history']
 
-    for i, message in enumerate(st.session_state.chat_history):
-        if i%2 == 0:
+    # Calculate the custom order of indices
+    n = len(st.session_state.chat_history)
+    custom_order = []
+    for i in range(n - 1, -1, -2):
+        custom_order.extend([i-1, i])
+    custom_order = [i for i in custom_order if i >= 0]
+
+    # Display messages in the custom order
+    for i in custom_order:
+        message = st.session_state.chat_history[i]
+        if i % 2 == 0:
             st.write(user_template.replace("{{msg}}", message.content), unsafe_allow_html=True)
         else:
-            st.write(bot_template.replace("{{msg}}", message.content),  unsafe_allow_html=True)
+            st.write(bot_template.replace("{{msg}}", message.content), unsafe_allow_html=True)
+
 
 
 def main():
@@ -87,8 +97,8 @@ def main():
     st.markdown(css, unsafe_allow_html=True)
     st.header("📖 Chat with your PDF: Books")
 
-    user_question = st.text_input("Ask question about document here...",)
-    
+    user_question = st.text_input("Ask question about document here...", key="input_box")
+
     if user_question:
         if st.session_state.conversation is not None:
             handle_user_input(user_question)
@@ -105,7 +115,7 @@ def main():
             if pdf_docs:
                 with st.spinner("Processing"):
                     # Get text from PDF
-                    raw_text = extract_text_from_pfd(st.session_state.pdf_docs)
+                    raw_text = extract_text_from_pfd(pdf_docs)
 
                     # Chunk the texts gathered
                     text_chunks = chunk_text(raw_text)
